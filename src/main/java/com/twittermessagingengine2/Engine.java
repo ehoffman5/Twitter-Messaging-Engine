@@ -6,19 +6,21 @@ public class Engine {
     private String[] mentions = new String[140];
     private String[] topics = new String[140];
     private String[] urls = new String[140];
+    private String message;
 
-
-
+    public Engine(String myMessage) {
+        message = myMessage;
+    }
 
     // print twitter message
-    public String getMessage(String message) {
+    public String getMessage() {
         System.out.println();
         System.out.println(message);
         return message;
     }
 
     // check tweet length
-    public boolean isCorrectLength(String message) {
+    public boolean isCorrectLength() {
         boolean flag = false;
 
         if (message.length() > 280) {
@@ -35,7 +37,7 @@ public class Engine {
 
     // detects mentions in tweet
     // mentions must come at the beginning of a tweet and be separated by spaces
-    public String[] detectMentions(String message) {
+    public String[] detectMentions() {
 
         // index variables
         int atIndex = message.indexOf('@');
@@ -79,7 +81,7 @@ public class Engine {
 
 
     // detects topics in tweet
-    public String[] detectTopics(String message) {
+    public String[] detectTopics() {
 
         // index variables
         int hashtagIndex = message.indexOf('#');
@@ -122,7 +124,7 @@ public class Engine {
 
 
     // detects urls in tweet
-    public String[] detectUrls(String message) {
+    public String[] detectUrls() {
 
         // index variables
         int wwwIndex = message.indexOf("www.");
