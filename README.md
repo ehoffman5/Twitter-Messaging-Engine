@@ -17,6 +17,8 @@ This project uses Maven to build and run files.
 
 1.)  Clone the project into intlleJ or IDE of choice
 
+2.) Import through maven (make sure sdk and dependencies are up to date)
+
 2.) Run Driver class
 
 3.) Input Tweet
