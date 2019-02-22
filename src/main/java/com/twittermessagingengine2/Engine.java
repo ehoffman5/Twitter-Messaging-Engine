@@ -1,167 +1,59 @@
 package com.twittermessagingengine2;
 
-public class Engine {
 
-    // instance variables
-    private String[] mentions = new String[140];
-    private String[] topics = new String[140];
-    private String[] urls = new String[140];
-    private String message;
-
-    public Engine(String myMessage) {
-        message = myMessage;
-    }
-
-    // print twitter message
-    public String getMessage() {
-        System.out.println();
-        System.out.println(message);
-        return message;
-    }
-
-    // check tweet length
-    public boolean isCorrectLength() {
-        boolean flag = false;
-
-        if (message.length() > 280) {
-            System.out.println();
-            System.out.println("Tweet length exceeds 280 characters.");
-            System.exit(0);
-        }
-        else
-            flag = true;
-
-        return flag;
-    }
+import java.net.URL;
+import java.util.Arrays;
+import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.lang.String;
 
 
-    // detects mentions in tweet
-    // mentions must come at the beginning of a tweet and be separated by spaces
-    public String[] detectMentions() {
+ public class Engine {
+     private String[] mentions;
+     private String[] topics;
+     private String[] references;
 
-        // index variables
-        int atIndex = message.indexOf('@');
-        int spaceIndex = message.indexOf(' ');
-        int x = 0;
+     private String tweet;
 
-        if (atIndex != -1) {
-            while ((atIndex >= 0) && (spaceIndex < message.length())) {
-                // normal tweet case
-                if ((atIndex < spaceIndex) || (spaceIndex == -1)) {
-                    if (spaceIndex != -1) {
-                        mentions[x] = (message.substring(atIndex, spaceIndex));
-                        atIndex = message.indexOf('@', atIndex + 1);
-                        spaceIndex = message.indexOf(' ', spaceIndex + 1);
-                        x++;
-                    } else {  // allows for a single mention as a tweet
-                        mentions[x] = (message.substring(atIndex, message.length()));
-                        atIndex = message.indexOf('@', atIndex + 1);
-                        x++;
-                    }
-                } else {
-                    spaceIndex = message.indexOf(' ', spaceIndex + 1);
-                    // System.out.println(spaceIndex);
-                }
-            }
-        }
+     public Engine (String tweet) {
+         this.tweet = tweet;
 
+         String mentionRegex = "(@[\\w_-]+)";
+         String hashtagRegex = "(#[\\w_-]+)";
+         String urlRegex = "(http?|ftp|file):\\/\\/[-a-zA-Z0-9+&@#\\/%=~_|]";
 
-        // prints each mention
-        if (mentions[0] != null) {
-            System.out.println();
-            System.out.println("Tweet Mentions:");
-        }
+         this.mentions = getMatches(mentionRegex, tweet);
+         this.topics = getMatches(hashtagRegex, tweet);
+         this.references = getMatches(urlRegex, tweet);
+     }
 
-        for (int i = 0; i < mentions.length; i++) {
-            if (mentions[i] != null)
-                System.out.println(mentions[i]);
-        }
-        return mentions;
-    }
+     private String[] getMatches(String regex, String input) {
+         List<String> list = new ArrayList<String>();
+         Matcher m = Pattern.compile(regex).matcher(input);
+         while (m.find()) {
+             list.add(m.group());
+         }
+         String[] array = new String[list.size()];
+         list.toArray(array);
+         return array;
+     }
 
+     public String getTweet() {
+         return tweet;
+     }
 
-    // detects topics in tweet
-    public String[] detectTopics() {
+     public String[] getMentions() {
+         return mentions;
+     }
 
-        // index variables
-        int hashtagIndex = message.indexOf('#');
-        int spaceIndex = message.indexOf(' ');
-        int x = 0;
+     public String[] getReferences() {
+         return references;
+     }
 
-        if (hashtagIndex != -1) {
-            while ((hashtagIndex >= 0) && (spaceIndex < message.length())) {
-                // normal tweet case
-                if ((hashtagIndex < spaceIndex) || (spaceIndex == -1)) {
-                    if (spaceIndex != -1) {
-                        topics[x] = (message.substring(hashtagIndex, spaceIndex));
-                        hashtagIndex = message.indexOf('#', hashtagIndex + 1);
-                        spaceIndex = message.indexOf(' ', spaceIndex + 1);
-                        x++;
-                    } else {  // allows for a single topic as a tweet
-                        topics[x] = (message.substring(hashtagIndex, message.length()));
-                        hashtagIndex = message.indexOf('#', hashtagIndex + 1);
-                        x++;
-                    }
-                } else {
-                    spaceIndex = message.indexOf(' ', spaceIndex + 1);
-                    // System.out.println(spaceIndex);
-                }
-            }
-        }
+     public String[] getTopics() {
+         return topics;
+     }
 
-        // prints each topic
-        if (topics[0] != null) {
-            System.out.println();
-            System.out.println("Tweet Topics:");
-        }
-
-        for (int i = 0; i < mentions.length; i++) {
-            if (topics[i] != null)
-                System.out.println(topics[i]);
-        }
-        return topics;
-    }
-
-
-    // detects urls in tweet
-    public String[] detectUrls() {
-
-        // index variables
-        int wwwIndex = message.indexOf("www.");
-        int spaceIndex = message.indexOf(' ');
-        int x = 0;
-
-        if (wwwIndex != -1) {
-            while ((wwwIndex >= 0) && (spaceIndex < message.length())) {
-                // normal tweet case
-                if ((wwwIndex < spaceIndex) || (spaceIndex == -1)) {
-                    if (spaceIndex != -1) {
-                        urls[x] = (message.substring(wwwIndex, spaceIndex));
-                        wwwIndex = message.indexOf("www.", wwwIndex + 1);
-                        spaceIndex = message.indexOf(' ', spaceIndex + 1);
-                        x++;
-                    } else {  // allows for a single url as a tweet
-                        urls[x] = (message.substring(wwwIndex, message.length()));
-                        wwwIndex = message.indexOf("www.", wwwIndex + 1);
-                        x++;
-                    }
-                } else {
-                    spaceIndex = message.indexOf(' ', spaceIndex + 1);
-                    // System.out.println(spaceIndex);
-                }
-            }
-        }
-
-        // prints each url
-        if (urls[0] != null) {
-            System.out.println();
-            System.out.println("Tweet URLs:");
-        }
-
-        for (int i = 0; i < mentions.length; i++) {
-            if (urls[i] != null)
-                System.out.println(urls[i]);
-        }
-        return urls;
-    }
-}
+ }

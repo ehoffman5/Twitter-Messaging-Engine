@@ -1,6 +1,7 @@
 package com.twittermessagingengine2;
 
 import java.util.Scanner;
+import java.util.Arrays;
 
 public class Driver {
     // test method (for use before test class)
@@ -13,10 +14,18 @@ public class Driver {
 
         Engine myObject = new Engine(myMessage);
 
-        myObject.isCorrectLength();
-        myObject.getMessage();
-        myObject.detectMentions();
-        myObject.detectTopics();
-        myObject.detectUrls();
+        System.out.println("Mentions: ");
+        System.out.println(Arrays.toString(myObject.getMentions()));
+        System.out.println();
+
+        System.out.println("Topics: ");
+        System.out.println(Arrays.toString(myObject.getTopics()));
+        System.out.println();
+
+        System.out.println("URL's: ");
+        System.out.println(Arrays.toString(myObject.getReferences()));
+        System.out.println();
+
     }
+
 }
