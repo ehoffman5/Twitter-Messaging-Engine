@@ -16,6 +16,8 @@ public class Engine {
     public String getMessage() {
         System.out.println();
         System.out.println(message);
+
+        int x = 0;
         return message;
     }
 
