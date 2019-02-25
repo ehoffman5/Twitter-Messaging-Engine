@@ -8,6 +8,7 @@ public class Engine {
     private String[] urls = new String[140];
     private String message;
 
+    // constructor initializes message string
     public Engine(String myMessage) {
         message = myMessage;
     }
