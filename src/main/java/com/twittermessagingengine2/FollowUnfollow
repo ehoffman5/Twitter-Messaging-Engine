@@ -1,0 +1,99 @@
+package com.twittermessagingengine2;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.CheckedTextView;
+import android.widget.ListView;
+
+import java.text.ParseException;
+import java.util.ArrayList;
+
+public class followUnfollow extends AppCompatActivity {
+
+    ArrayList<String> ParseUser = new ArrayList<>(); //Creating Arraylist of users
+
+    ArrayAdapter arrayAdapter;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        setTitle("User List");
+
+        if(ParseUser.getCurrentUser().get("isFollowing") == null) {
+            ArrayList<String> emptyList = new ArrayList<>();
+            ParseUser.getCurrentUser().put("isFollowing", emptyList);
+        }
+
+
+
+        final ListView listView = (ListView) findViewById(R.id.listView);
+
+        listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+
+        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_checked, users);
+
+        listView.setAdapter(arrayAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                CheckedTextView checkedTextView = (CheckedTextView) view;
+
+                if(CheckedTextView.isChecked()) {
+
+                    Log.i("Info", "Row is checked");
+
+                    ParseUser.getCurrentUser().getList("is Following").add(users.get(i));
+
+                    ParseUser.getCurrentUser().saveInBackground();
+
+                } else {
+
+                    Log.i("Info", "Row is not checked");
+
+                    ParseUser.getCurrentUser().getList("is Following").remove(users.get(i));
+
+                    ParserUser.getCurrentUser().saveInBackground();
+                }
+            }
+        });
+
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+
+        query.whereNotEqualTo("username", ParseUser.getCurrentUser().getUsername());
+
+        query.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> objects, ParseException e) {
+
+                if(e == null) {
+
+                    if(objects.size() > 0) {
+
+                        for(ParseUser user : objects) {
+
+                            users.add(user.getUsername());
+                        }
+
+                        arrayAdapter.notifyDataSetChanged();
+
+                        for(String user : users) {
+
+                            if(ParseUser.getCurrentUser().getList("isFollowing").contains(username)) {
+
+                                listView.setItemChecked(users.indexOf(username), true);
+                            }
+                        }
+
+
+                    }
+                }
+            }}
