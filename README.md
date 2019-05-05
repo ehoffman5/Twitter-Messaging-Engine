@@ -1,6 +1,3 @@
-# Twitter-Messaging-Engine-2.0
-COMP 330 - Software Engineering Project 2, Team 4
-
 ## Twitter Messaging Engine 2.0
 
 This project takes user inputed tweets and parses the following:
